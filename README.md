@@ -55,3 +55,35 @@ Detected Events:
 1. **Affected Component:** `src/aiops_pipeline.py`
 2. **Cause:** The producer and consumer were initialized with two different, disconnected in-memory topics (`"service-events"` and `"anomaly-events"`). Because the topics are disconnected lists, events published by the producer were never received by the consumer.
 3. **Correction:** Created a single shared topic instance (`shared_topic = EventTopic("anomaly-events")`) and passed this same instance to both the `EventProducer` and `EventConsumer`.
+
+## 6. Execute the End-to-End Pipeline
+The end-to-end pipeline was executed successfully, verifying the complete AIOps workflow:
+1. **Operational data processed:** 10 records were processed successfully.
+2. **Anomalous behaviour detected:** 2 anomalies were detected at 10:05:00 and 10:06:00.
+3. **Event generated:** The detector successfully created anomaly event payloads.
+4. **Event published:** The producer published the 2 events to the shared topic.
+5. **Event consumed:** The consumer successfully received the 2 events from the shared topic.
+6. **Event processed successfully:** The downstream AIOps component received the consumed events.
+7. **Final output:** The final output accurately represents the operational issues (high response times, high resource utilization, and error logs).
+
+**Final Execution Output:**
+```text
+==================================================
+AIOps Pipeline Result
+==================================================
+Records processed: 10
+Anomalies detected: 2
+Events consumed: 2
+
+Detected Events:
+
+Service: payment-service
+Timestamp: 2026-09-20T10:05:00
+Type: ANOMALY
+Reasons: High response time, Error log detected
+
+Service: payment-service
+Timestamp: 2026-09-20T10:06:00
+Type: ANOMALY
+Reasons: High response time, High CPU utilization, High memory utilization, Error log detected
+```
