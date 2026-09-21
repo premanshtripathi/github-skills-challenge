@@ -44,3 +44,14 @@ Events consumed: 0
 
 Detected Events:
 ```
+## 5. Investigate and Correct the Workflow
+
+**Problem 1: Missed Error Logs**
+1. **Affected Component:** `src/anomaly_detector.py`
+2. **Cause:** The detector was hardcoded to check for `"WARNING"` logs (`if record["log_level"] == "WARNING":`). The operational data uses `"ERROR"` during failure states, causing the detector to miss critical log events.
+3. **Correction:** Updated the condition to check for `"ERROR"` logs instead.
+
+**Problem 2: Broken Event Flow**
+1. **Affected Component:** `src/aiops_pipeline.py`
+2. **Cause:** The producer and consumer were initialized with two different, disconnected in-memory topics (`"service-events"` and `"anomaly-events"`). Because the topics are disconnected lists, events published by the producer were never received by the consumer.
+3. **Correction:** Created a single shared topic instance (`shared_topic = EventTopic("anomaly-events")`) and passed this same instance to both the `EventProducer` and `EventConsumer`.

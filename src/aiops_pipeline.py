@@ -15,14 +15,15 @@ def run_pipeline(file_path):
     data = load_data(file_path)
 
     # INTENTIONAL ASSESSMENT ISSUE #2
-    producer_topic = EventTopic("service-events")
+    
+    # Creating a shared topic
+    shared_topic = EventTopic("anomaly-events")
 
     detector = AnomalyDetector()
-    producer = EventProducer(producer_topic)
+    producer = EventProducer(shared_topic)
 
     # INTENTIONAL ASSESSMENT ISSUE #3
-    consumer_topic = EventTopic("anomaly-events")
-    consumer = EventConsumer(consumer_topic)
+    consumer = EventConsumer(shared_topic)
 
     detected_events = []
 
