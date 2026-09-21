@@ -101,3 +101,19 @@ To reproduce this AIOps workflow demonstration:
 2. Install the required dependencies by running: `pip install -r requirements.txt`
 3. Execute the complete end-to-end pipeline by running: `python src/aiops_pipeline.py`
 4. Run the provided automated tests to validate the components: `python -m pytest`
+
+## 10. Validation Execution
+The provided test suite was executed successfully, verifying that the operational data is processed, anomalies are generated, and events move through the simulated pipeline correctly.
+
+```text
+============================================ test session starts =============================================
+platform linux -- Python 3.13.15, pytest-8.4.1, pluggy-1.6.0
+rootdir: /workspaces/github-skills-challenge
+plugins: cov-7.1.0
+collected 8 items                                                                                            
+
+tests/calculations_test.py ....                                                                        [ 50%]
+tests/test_aiops_pipeline.py ....                                                                      [100%]
+
+============================================= 8 passed in 0.05s ==============================================
+```
