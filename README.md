@@ -87,3 +87,17 @@ Timestamp: 2026-09-20T10:06:00
 Type: ANOMALY
 Reasons: High response time, High CPU utilization, High memory utilization, Error log detected
 ```
+## 7. Issues Identified and Corrected
+* **Missed Error Logs:** The anomaly detector (`src/anomaly_detector.py`) was incorrectly checking for `"WARNING"` logs. This was corrected by updating the condition to check for `"ERROR"` logs to match the operational data.
+* **Broken Event Flow:** The producer and consumer in `src/aiops_pipeline.py` were initialized with two disconnected topics (`"service-events"` and `"anomaly-events"`). This was corrected by creating a single shared `EventTopic` instance and passing it to both components.
+
+## 8. Limitation and Possible Improvement
+* **Limitation:** The current anomaly detection logic relies on static, hardcoded thresholds (e.g., CPU > 80%, response time > 500ms). In a real production environment, traffic fluctuates naturally, and rigid static thresholds would generate false positives and alert fatigue.
+* **Improvement:** Implement dynamic baselining using statistical methods or a machine learning anomaly detection model (such as an Isolation Forest) to adaptively learn normal system behavior over time.
+
+## 9. Reproduction Steps
+To reproduce this AIOps workflow demonstration:
+1. Clone this repository and open the environment in a GitHub Codespace.
+2. Install the required dependencies by running: `pip install -r requirements.txt`
+3. Execute the complete end-to-end pipeline by running: `python src/aiops_pipeline.py`
+4. Run the provided automated tests to validate the components: `python -m pytest`
